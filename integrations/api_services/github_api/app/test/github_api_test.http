@@ -1,0 +1,52 @@
+@host = http://localhost:9000
+
+###
+# 测试获取文件内容的接口
+POST {{host}}/get/file_content
+Content-Type: application/json
+
+{
+  "url": "https://github.com/trickest/cve/blob/72bdbf53defd6ffa6657df68e4aff295304f5a82/2022/CVE-2022-24990.md"
+}
+
+
+###
+# 测试搜索代码的接口
+POST {{host}}/search/code
+Content-Type: application/json
+
+{
+  "keyword": "CVE-2022-24990",
+  "per_page": 100,
+  "max_results": 1000,
+  "extra_params": {},
+  "highlight": true
+}
+
+###
+# 测试搜索仓库的接口
+POST {{host}}/search/repositories
+Content-Type: application/json
+
+{
+  "keyword": "cve"
+}
+
+###
+# 测试获取仓库 README 的接口
+POST {{host}}/get/repository_readme
+Content-Type: application/json
+
+{
+  "owner": "lishang520",
+  "repo": "CVE-2022-24990"
+}
+
+
+###
+# 测试limit
+GET {{host}}/get/rate_limits
+Content-Type: application/json
+
+
+
