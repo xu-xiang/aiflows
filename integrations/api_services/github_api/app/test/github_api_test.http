@@ -42,11 +42,31 @@ Content-Type: application/json
   "repo": "CVE-2022-24990"
 }
 
+###
+# 测试获取用户 Starred 仓库的接口
+POST {{host}}/user/starred
+Content-Type: application/json
+
+{
+  "username": "xu-xiang",
+  "max_repos": 500,
+  "per_page": 100
+}
+
 
 ###
 # 测试limit
 GET {{host}}/get/rate_limits
 Content-Type: application/json
 
+###
+# 测试获取项目信息
+POST {{host}}/get/repository_info
+Content-Type: application/json
 
+{
+  "owner": "coco413",
+  "repo": "SecNavi",
+  "include_readme": true
+}
 

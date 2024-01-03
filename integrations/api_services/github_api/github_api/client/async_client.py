@@ -5,12 +5,14 @@ import asyncio
 import time
 import logging
 
+from github_api.api.fetch_all_starred_repos_impl import fetch_all_starred_repos_impl
 from github_api.api.get_file_content import get_file_content_impl
 from github_api.api.get_readme import get_readme_impl
 from github_api.utils.logger import setup_logger
 from github_api.api.code_search import code_search_impl
 from github_api.api.repositories_search import search_repositories_impl
 from github_api.api.get_rate_limits import get_rate_limits_impl
+from github_api.api.get_repository_info import repository_info_impl
 
 
 class AsyncGitHubClient:
@@ -78,3 +80,10 @@ class AsyncGitHubClient:
 
     async def get_rate_limits(self) -> str:
         return await get_rate_limits_impl(self.fetch_github_api, self.tokens)
+
+    async def fetch_all_starred_repos(self, username: str, max_repos: int = 1000, per_page: int = 100) -> List[dict]:
+        """获取用户所有 star 的仓库"""
+        return await fetch_all_starred_repos_impl(self, username, max_repos, per_page)
+
+    async def get_repository_info(self, owner: str, repo: str, include_readme: bool = False):
+        return await repository_info_impl(self, owner, repo, include_readme)

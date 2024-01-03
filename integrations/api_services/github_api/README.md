@@ -1,78 +1,113 @@
 # GitHub API FastAPI Documentation
 
+## Install
+
+```bash
+docker run --name github_api -d -p 10002:9000 -e TOKENS='token1,token2,token3,token4'  registry.cn-hangzhou.aliyuncs.com/aiflows/github_api
+```
+
 ## API Overview
+
 This FastAPI application provides several endpoints to interact with. The API version is `0.1.0`.
 
 ### Endpoints
 
-#### 1. POST `/search/code`
-   - **Summary**: Api Search Code
-   - **Request**: Requires a JSON body with schema `SearchCodeRequest`.
-     - `keyword` (string): Keyword for search.
-     - `per_page` (integer, optional, default=100): Number of results per page.
-     - `max_results` (integer, optional, default=1000): Maximum number of results.
-     - `extra_params` (object, optional): Additional parameters for search.
-     - `highlight` (boolean, optional, default=false): Highlight search results.
-   - **Responses**:
-     - `200`: Successful Response
-     - `422`: Validation Error
+#### POST `/search/code`
 
-#### 2. POST `/get/file_content`
-   - **Summary**: Api Get File Content
-   - **Request**: Requires a JSON body with schema `GetFileContentRequest`.
-     - `url` (string): URL of the file.
-     - `repo_name` (string): Repository name.
-     - `file_path` (string): Path to the file.
-     - `branch` (string): Repository branch.
-   - **Responses**:
-     - `200`: Successful Response
-     - `422`: Validation Error
+- **Summary**: Api Search Code
+- **Request Body**:
+    - Content Type: `application/json`
+    - Schema: `#/components/schemas/SearchCodeRequest`
+        - `keyword`: Keyword (string)
+        - `per_page`: Per Page ()
+        - `max_results`: Max Results ()
+        - `extra_params`: Extra Params ()
+        - `highlight`: Highlight (boolean)
+- **Responses**:
+    - `200`: Successful Response
+    - `422`: Validation Error
+        - Schema: `#/components/schemas/HTTPValidationError`
+        - `detail`: Detail (array)
 
-#### 3. POST `/get/repository_readme`
-   - **Summary**: Api Get Repository Readme
-   - **Request**: Requires a JSON body with schema `GetRepositoryReadmeRequest`.
-     - `owner` (string): Owner of the repository.
-     - `repo` (string): Repository name.
-     - `ref` (string): Reference branch or tag.
-   - **Responses**:
-     - `200`: Successful Response
-     - `422`: Validation Error
+#### POST `/get/file_content`
 
-#### 4. GET `/get/rate_limits`
-   - **Summary**: Api Get Rate Limits
-   - **Responses**:
-     - `200`: Successful Response
+- **Summary**: Api Get File Content
+- **Request Body**:
+    - Content Type: `application/json`
+    - Schema: `#/components/schemas/GetFileContentRequest`
+        - `url`: Url (string)
+        - `repo_name`: Repo Name (string)
+        - `file_path`: File Path (string)
+        - `branch`: Branch (string)
+- **Responses**:
+    - `200`: Successful Response
+    - `422`: Validation Error
+        - Schema: `#/components/schemas/HTTPValidationError`
+        - `detail`: Detail (array)
 
-#### 5. POST `/search/repositories`
-   - **Summary**: Api Search Repositories
-   - **Request**: Requires a JSON body with schema `SearchRepositoriesRequest`.
-     - `keyword` (string): Keyword for search.
-     - `per_page` (integer, default=100): Number of results per page.
-     - `max_results` (integer, default=1000): Maximum number of results.
-   - **Responses**:
-     - `200`: Successful Response
-     - `422`: Validation Error
+#### POST `/get/repository_readme`
 
-### Schemas
-- `GetFileContentRequest`: Request schema for getting file content.
-- `GetRepositoryReadmeRequest`: Request schema for getting repository readme.
-- `HTTPValidationError`: Schema for HTTP validation errors.
-- `SearchCodeRequest`: Request schema for searching code.
-- `SearchRepositoriesRequest`: Request schema for searching repositories.
-- `ValidationError`: Schema for validation errors.
+- **Summary**: Api Get Repository Readme
+- **Request Body**:
+    - Content Type: `application/json`
+    - Schema: `#/components/schemas/GetRepositoryReadmeRequest`
+        - `owner`: Owner (string)
+        - `repo`: Repo (string)
+        - `ref`: Ref (string)
+- **Responses**:
+    - `200`: Successful Response
+    - `422`: Validation Error
+        - Schema: `#/components/schemas/HTTPValidationError`
+        - `detail`: Detail (array)
 
-## Usage
+#### GET `/get/rate_limits`
 
-### Running the API
-To start the FastAPI server, run:
-```bash
-uvicorn main:app --reload
-```
+- **Summary**: Api Get Rate Limits
+- **Responses**:
+    - `200`: Successful Response
 
-Replace `main:app` with the actual module and app instance names.
+#### POST `/search/repositories`
 
-### Interacting with the API
-You can interact with the API by sending HTTP requests to the endpoints listed above. Each endpoint might require specific request parameters or body as described.
+- **Summary**: Api Search Repositories
+- **Request Body**:
+    - Content Type: `application/json`
+    - Schema: `#/components/schemas/SearchRepositoriesRequest`
+        - `keyword`: Keyword (string)
+        - `per_page`: Per Page (integer)
+        - `max_results`: Max Results (integer)
+- **Responses**:
+    - `200`: Successful Response
+    - `422`: Validation Error
+        - Schema: `#/components/schemas/HTTPValidationError`
+        - `detail`: Detail (array)
 
-## Contributing
-Contributions to this API are welcome. Please follow the standard procedures for submitting issues or pull requests.
+#### POST `/user/starred`
+
+- **Summary**: Fetch User Starred Repos
+- **Request Body**:
+    - Content Type: `application/json`
+    - Schema: `#/components/schemas/StarredReposRequest`
+        - `username`: Username (string)
+        - `max_repos`: Max Repos ()
+        - `per_page`: Per Page (integer)
+- **Responses**:
+    - `200`: Successful Response
+    - `422`: Validation Error
+        - Schema: `#/components/schemas/HTTPValidationError`
+        - `detail`: Detail (array)
+
+#### POST `/get/repository_info`
+
+- **Summary**: Api Get Repository Info
+- **Request Body**:
+    - Content Type: `application/json`
+    - Schema: `#/components/schemas/RepositoryInfoRequest`
+        - `owner`: Owner (string)
+        - `repo`: Repo (string)
+        - `include_readme`: Include Readme (boolean)
+- **Responses**:
+    - `200`: Successful Response
+    - `422`: Validation Error
+        - Schema: `#/components/schemas/HTTPValidationError`
+        - `detail`: Detail (array)
+

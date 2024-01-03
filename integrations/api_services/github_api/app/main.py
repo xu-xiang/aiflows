@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from github_api.client.async_client import AsyncGitHubClient
 import logging
-from utils import load_environment_variables, handle_exception
+from app.utils import load_environment_variables, handle_exception
 
 # 初始化 FastAPI 应用
 app = FastAPI()
@@ -48,6 +48,18 @@ class SearchRepositoriesRequest(BaseModel):
     max_results: int = 1000
 
 
+class StarredReposRequest(BaseModel):
+    username: str
+    max_repos: Optional[int] = None
+    per_page: int = 100
+
+
+class RepositoryInfoRequest(BaseModel):
+    owner: str
+    repo: str
+    include_readme: bool = False
+
+
 @app.exception_handler(Exception)
 async def universal_exception_handler(request: Request, exc: Exception):
     return handle_exception(request, exc)
@@ -88,6 +100,20 @@ async def api_search_repositories(request: SearchRepositoriesRequest):
     results = await client.search_repositories(query=request.keyword, per_page=request.per_page,
                                                max_results=request.max_results)
     return results
+
+
+@app.post("/user/starred")
+async def fetch_user_starred_repos(request: StarredReposRequest):
+    results = await client.fetch_all_starred_repos(username=request.username,
+                                                   max_repos=request.max_repos,
+                                                   per_page=request.per_page)
+    return results
+
+
+@app.post("/get/repository_info")
+async def api_get_repository_info(request: RepositoryInfoRequest):
+    repo_info = await client.get_repository_info(request.owner, request.repo, include_readme=request.include_readme)
+    return repo_info
 
 
 if __name__ == "__main__":
